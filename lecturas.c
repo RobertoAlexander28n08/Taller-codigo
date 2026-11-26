@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "lecturas.h"
 
-FILE* archivo; // Declaración global de archivo
-
 int leerEnteroPositivo(const char* mensaje) {
     int valor;
     do {

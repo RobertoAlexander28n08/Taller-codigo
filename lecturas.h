@@ -7,5 +7,3 @@ float leerFlotantePositivo(const char* mensaje);
 float leerFlotanteEntre(const char* mensaje, float minimo, float maximo);
 
 char leerCaracter(const char* mensaje);
-
-extern FILE* archivo; // Declaración externa de archivo
