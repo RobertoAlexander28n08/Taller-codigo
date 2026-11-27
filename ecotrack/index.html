@@ -278,11 +278,13 @@
       };
       const renderRoute = () => {
         const completed = stops.filter(stop => stop.done).length;
+        const allStopsCompleted = completed === stops.length;
+        const routeFinished = allStopsCompleted && !routeStarted;
         document.getElementById("stops-count").textContent = `${completed}/${stops.length}`;
-        document.getElementById("route-state").textContent = completed === stops.length ? "Finalizada" : routeStarted ? "En curso" : "Pendiente";
+        document.getElementById("route-state").textContent = routeFinished ? "Finalizada" : routeStarted ? "En curso" : "Pendiente";
         const badge = document.getElementById("route-status");
-        badge.textContent = completed === stops.length ? "Ruta finalizada" : routeStarted ? "Recorrido en curso" : "Lista para iniciar";
-        badge.className = `badge ${completed === stops.length ? "ready" : routeStarted ? "progress" : "ready"}`;
+        badge.textContent = routeFinished ? "Ruta finalizada" : routeStarted ? "Recorrido en curso" : "Lista para iniciar";
+        badge.className = `badge ${routeFinished || !routeStarted ? "ready" : "progress"}`;
         document.getElementById("stop-list").innerHTML = stops.map((stop, index) => `
           <li class="stop ${stop.done ? "done" : ""}">
             <span class="stop-number">${stop.done ? "✓" : index + 1}</span>
@@ -291,9 +293,9 @@
             ${stop.done ? '<span class="badge ready">Recogido</span>' : ""}
           </li>`).join("");
         const action = document.getElementById("route-action");
-        action.disabled = completed === stops.length;
-        action.textContent = completed === stops.length ? "Ruta finalizada" : routeStarted ? "Finalizar recorrido" : "Iniciar recorrido";
-        action.classList.toggle("secondary", completed === stops.length);
+        action.disabled = routeFinished || (routeStarted && !allStopsCompleted);
+        action.textContent = routeFinished ? "Ruta finalizada" : routeStarted ? allStopsCompleted ? "Finalizar recorrido" : "Registra todas las paradas" : "Iniciar recorrido";
+        action.classList.toggle("secondary", routeFinished);
       };
 
       document.querySelectorAll('[role="tab"]').forEach((tab, index, tabs) => {
